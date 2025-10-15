@@ -1,67 +1,71 @@
-const playlist = [
-  {
-    name: "ช่อง 7 HD",
-    resolveUrl: "http://mains.services/live/bshorty/Zv5le07a0J/3a3f7ae8-8967-4580-b030-4a66fea7167b.m3u8"
-  },
-  {
-    name: "ช่อง 3 HD",
-    resolveUrl: "http://mains.services/live/bshorty/Zv5le07a0J/6048d24e-681a-41ce-b7f6-0ed78c7d5f55.m3u8"
-  }
-];
-
-const video = document.getElementById('video');
-const status = document.getElementById('status');
-const select = document.getElementById('channelSelect');
-let hls;
-let refreshInterval;
-
-if (!localStorage.getItem("loggedIn")) {
-  location.href = "login.html";
-}
-
-playlist.forEach((item, i) => {
-  const opt = document.createElement('option');
-  opt.value = i;
-  opt.textContent = item.name;
-  select.appendChild(opt);
-});
-
-select.addEventListener('change', () => playChannel(parseInt(select.value)));
-playChannel(0);
-
-async function playChannel(index) {
-  clearInterval(refreshInterval);
-  const channel = playlist[index];
-  const m3u8 = await fetchStream(channel.resolveUrl);
-  if (!m3u8) {
-    status.textContent = "❌ ไม่พบลิงก์";
-    return;
-  }
-  if (hls) hls.destroy();
-  hls = new Hls();
-  hls.attachMedia(video);
-  hls.loadSource(m3u8);
-  hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-  status.textContent = `▶️ Playing ${channel.name}`;
-
-  refreshInterval = setInterval(async () => {
-    const newUrl = await fetchStream(channel.resolveUrl);
-    if (newUrl) {
-      hls.loadSource(newUrl);
-      video.play();
-      status.textContent = `✅ Refresh: ${channel.name}`;
+function login() {
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+    if (user === "admin" && pass === "1234") {
+        localStorage.setItem("loggedIn", true);
+        window.location.href = "index.html";
+    } else {
+        document.getElementById("error").innerText = "Username หรือ Password ไม่ถูกต้อง";
     }
-  }, 5 * 60 * 1000);
 }
-
-async function fetchStream(url) {
-  try {
-    const res = await fetch(url);
-    const text = await res.text();
-    const match = text.match(/(http[^"']+\.m3u8[^"']*)/i);
-    return match ? match[1] : null;
-  } catch (e) {
-    console.error(e);
-    return null;
-  }
+function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "login.html";
 }
+function checkLogin() {
+    if (!localStorage.getItem("loggedIn")) {
+        window.location.href = "login.html";
+    }
+}
+checkLogin();
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+}
+async function loadMovies() {
+    const res = await fetch("playlist.json");
+    const movies = await res.json();
+    const container = document.getElementById("movieContainer");
+    container.innerHTML = "";
+    movies.forEach(movie => {
+        const div = document.createElement("div");
+        div.className = "movie-card";
+        div.innerHTML = `
+            <h3>${movie.title}</h3>
+            <p>${movie.category}</p>
+            <button onclick="playMovie('${movie.title}', '${movie.url}', '${movie.type}')">ดูหนัง</button>
+        `;
+        container.appendChild(div);
+    });
+}
+function searchMovies() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    document.querySelectorAll(".movie-card").forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(input) ? "block" : "none";
+    });
+}
+function playMovie(title, url, type) {
+    localStorage.setItem("movieTitle", title);
+    localStorage.setItem("movieURL", url);
+    localStorage.setItem("movieType", type);
+    window.location.href = "player.html";
+}
+function goBack() {
+    window.location.href = "index.html";
+}
+window.onload = function() {
+    if (window.location.pathname.endsWith("index.html")) {
+        loadMovies();
+    }
+    if (window.location.pathname.endsWith("player.html")) {
+        const title = localStorage.getItem("movieTitle");
+        const url = localStorage.getItem("movieURL");
+        const type = localStorage.getItem("movieType");
+        document.getElementById("movieTitle").innerText = title;
+        const container = document.getElementById("videoContainer");
+        if (type === "m3u8") {
+            container.innerHTML = `<video controls autoplay style="width:100%"><source src="${url}" type="application/x-mpegURL"></video>`;
+        } else if (type === "iframe") {
+            container.innerHTML = `<iframe src="${url}" width="100%" height="500" frameborder="0" allowfullscreen></iframe>`;
+        }
+    }
+};

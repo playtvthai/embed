@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #121212;
+    color: white;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #1f1f1f;
+}
+header h1 {
+    margin: 0;
+}
+.header-actions input {
+    padding: 5px;
+}
+header button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+.login-container input {
+    margin: 5px 0;
+    padding: 10px;
+}
+.error {
+    color: red;
+}
+#movieContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 15px;
+}
+.movie-card {
+    background: #222;
+    padding: 10px;
+    border-radius: 5px;
+}
+.movie-card h3 {
+    margin: 10px 0 0 0;
+}
+.player-container {
+    padding: 15px;
+}

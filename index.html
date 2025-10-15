@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>📺 Web Player</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <style>
-    body { font-family: sans-serif; background: #000; color: #fff; padding: 20px; margin: 0; }
-    select, video { width: 100%; margin-bottom: 10px; font-size: 16px; }
-    #status { color: #0f0; font-weight: bold; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Web</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>🎥 Player + Auto Token Refresh</h2>
-  <select id="channelSelect"></select>
-  <video id="video" controls></video>
-  <div id="status">⏳ กำลังโหลด...</div>
-  <script src="script.js"></script>
+<header>
+    <h1>Movie Web</h1>
+    <div class="header-actions">
+        <input type="text" id="searchInput" placeholder="ค้นหาหนัง..." onkeyup="searchMovies()">
+        <button onclick="toggleTheme()">🌙 / ☀️</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+</header>
+<main>
+    <div id="movieContainer"></div>
+</main>
+<script src="script.js"></script>
 </body>
 </html>

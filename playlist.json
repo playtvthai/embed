@@ -1,0 +1,26 @@
+[
+    {
+        "title": "Avengers: Endgame",
+        "category": "Action",
+        "type": "m3u8",
+        "url": "http://mains.services/live/bshorty/Zv5le07a0J/3a3f7ae8-8967-4580-b030-4a66fea7167b.m3u8"
+    },
+    {
+        "title": "John Wick 3",
+        "category": "Action",
+        "type": "iframe",
+        "url": "https://www.example.com/embed/johnwick3"
+    },
+    {
+        "title": "The King: Eternal Monarch",
+        "category": "Series",
+        "type": "m3u8",
+        "url": "http://mains.services/live/bshorty/Zv5le07a0J/6048d24e-681a-41ce-b7f6-0ed78c7d5f55.m3u8"
+    },
+    {
+        "title": "Squid Game",
+        "category": "Series",
+        "type": "iframe",
+        "url": "https://m3u8haha.com/movie/M15491.mp4/playlist.m3u8"
+    }
+]
